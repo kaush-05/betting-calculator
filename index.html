@@ -6,7 +6,7 @@
   <title>Hedge Bet Calculator Pro</title>
   <style>
     :root {
-      --bg-light: #f4f7fa;
+      --bg-light: #f9fafb;
       --card-light: #ffffff;
       --text-light: #111827;
       --subtext-light: #555;
@@ -14,27 +14,34 @@
       --bg-dark: #121212;
       --card-dark: #1f1f1f;
       --text-dark: #f9fafb;
-      --subtext-dark: #cccccc;
-      --border-dark: #444;
       --accent: #4f46e5;
       --hover-light: #e3e8f0;
       --hover-dark: #333;
+      --input-border: #d1d5db;
+      --input-focus-border: #4f46e5;
+      --button-bg: #4f46e5;
+      --button-hover-bg: #3b3de3;
+      --text-button: #ffffff;
+      --animation-duration: 0.4s;
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 30px;
       background-color: var(--bg-light);
       color: var(--text-light);
       transition: background-color 0.3s, color 0.3s;
       display: flex;
       justify-content: center;
+      align-items: center;
       min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
     }
 
     body.dark-mode {
@@ -44,22 +51,28 @@
 
     .calculator {
       background-color: var(--card-light);
-      padding: 25px 30px;
+      padding: 40px;
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
       max-width: 500px;
       width: 100%;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s, color 0.3s, transform 0.5s;
+      transform: translateY(30px);
+      opacity: 0;
     }
 
     body.dark-mode .calculator {
       background-color: var(--card-dark);
     }
 
+    body.dark-mode .calculator {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
     .toggle-btn {
       display: flex;
       justify-content: flex-end;
-      margin-bottom: 10px;
     }
 
     .toggle-btn button {
@@ -70,7 +83,7 @@
       border-radius: 8px;
       font-size: 14px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, transform 0.3s;
     }
 
     body.dark-mode .toggle-btn button {
@@ -80,10 +93,12 @@
 
     .toggle-btn button:hover {
       background-color: var(--hover-light);
+      transform: scale(1.05);
     }
 
     body.dark-mode .toggle-btn button:hover {
       background-color: var(--hover-dark);
+      transform: scale(1.05);
     }
 
     h2 {
@@ -91,42 +106,59 @@
       margin-bottom: 20px;
       font-size: 24px;
       color: var(--accent);
+      animation: fadeIn 0.6s ease-out forwards;
     }
 
     label {
       display: block;
-      margin: 15px 0 5px;
+      margin: 12px 0 6px;
       font-weight: 600;
+      font-size: 16px;
+      animation: fadeIn 0.6s ease-out forwards;
+      animation-delay: 0.5s;
     }
 
     input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       font-size: 16px;
-      border: 1px solid var(--border-light);
+      border: 2px solid var(--input-border);
       border-radius: 10px;
       background-color: #fff;
       color: #000;
-      transition: background-color 0.3s, color 0.3s, border 0.3s;
-      margin-bottom: 15px;
+      transition: all 0.3s ease-in-out;
+      margin-bottom: 20px;
+      animation: fadeIn 0.6s ease-out forwards;
+      animation-delay: 1s;
     }
 
     body.dark-mode input {
       background-color: #2c2c2c;
       color: #f9f9f9;
-      border: 1px solid var(--border-dark);
+      border: 2px solid var(--input-border);
+    }
+
+    body.dark-mode input:focus {
+      border-color: var(--input-focus-border);
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      outline: none;
     }
 
     .output {
       margin-top: 20px;
-      padding: 20px;
-      background-color: #f4f7fa;
+      padding: 25px;
+      background-color: var(--bg-light);
       border-left: 5px solid var(--accent);
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 16px;
       color: #333;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       transition: background 0.3s, color 0.3s;
+      animation: fadeIn 0.6s ease-out forwards;
+      animation-delay: 1.5s;
     }
 
     body.dark-mode .output {
@@ -140,6 +172,28 @@
       color: var(--accent);
     }
 
+    .button {
+      display: inline-block;
+      width: 100%;
+      padding: 15px;
+      background-color: var(--button-bg);
+      color: var(--text-button);
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s;
+      border: none;
+      animation: fadeIn 0.6s ease-out forwards;
+      animation-delay: 2s;
+    }
+
+    .button:hover {
+      background-color: var(--button-hover-bg);
+      transform: scale(1.05);
+    }
+
     @media (max-width: 500px) {
       body {
         padding: 15px;
@@ -151,6 +205,18 @@
 
       .output {
         font-size: 14px;
+      }
+    }
+
+    /* Animation for fading in elements */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   </style>
@@ -174,6 +240,8 @@
 
     <label for="budget">Total Budget:</label>
     <input type="number" id="budget" step="0.01" placeholder="e.g. 2350" oninput="calculate()" />
+
+    <button class="button" onclick="calculate()">Calculate Optimal Bets</button>
 
     <div class="output" id="result">🔢 Enter values to calculate optimal bets.</div>
   </div>
@@ -224,9 +292,9 @@
         ✅ If <strong>Team A wins</strong>: Return = $${returnA.toFixed(2)} → Loss = $${lossA.toFixed(2)}<br>
         ✅ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Loss = $${lossB.toFixed(2)}<br>
         ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Loss = $${lossD.toFixed(2)}<br>` : ''}
-        <br>📉 <strong>Worst-case loss:</strong> $${Math.max(lossA, lossB, lossD || 0).toFixed(2)}
 
-        <br><br><strong>💰 Total Profit:</strong> $${totalProfit.toFixed(2)}
+        <br><strong>Total Profit (A + B):</strong> $${totalProfit.toFixed(2)}<br>
+        <strong>Worst-case loss:</strong> $${Math.max(lossA, lossB, lossD || 0).toFixed(2)}
       `;
       resultBox.innerHTML = outcome;
     }
