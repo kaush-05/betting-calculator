@@ -225,6 +225,10 @@
       const pctB = (lossB / budget) * 100;
       const pctD = lossD !== null ? (lossD / budget) * 100 : null;
 
+      const netProfitA = returnA - budget;
+      const netProfitB = returnB - budget;
+      const netProfitD = returnD !== undefined ? returnD - budget : null;
+
       const outcome = `
         <strong>🔁 Optimal Bet Split:</strong><br>
         • Team A: <strong>$${betA.toFixed(2)}</strong><br>
@@ -232,9 +236,9 @@
         ${oddsD > 1 ? `• Draw: <strong>$${betD.toFixed(2)}</strong><br>` : ''}
 
         <br><strong>📊 Outcomes:</strong><br>
-        ✅ If <strong>Team A wins</strong>: Return = $${returnA.toFixed(2)} → Loss = $${lossA.toFixed(2)} (${pctA.toFixed(2)}%)<br>
-        ✅ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Loss = $${lossB.toFixed(2)} (${pctB.toFixed(2)}%)<br>
-        ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Loss = $${lossD.toFixed(2)} (${pctD.toFixed(2)}%)<br>` : ''}
+        ✅ If <strong>Team A wins</strong>: Return = $${returnA.toFixed(2)} → Net Profit = $${netProfitA.toFixed(2)}<br>
+        ✅ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Net Profit = $${netProfitB.toFixed(2)}<br>
+        ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Net Profit = $${netProfitD.toFixed(2)}<br>` : ''}
         <br>📉 <strong>Worst-case loss:</strong> $${Math.max(lossA, lossB, lossD || 0).toFixed(2)}
       `;
       resultBox.innerHTML = outcome;
@@ -250,6 +254,9 @@
         lossA: lossA.toFixed(2),
         lossB: lossB.toFixed(2),
         lossD: lossD ? lossD.toFixed(2) : null,
+        netProfitA: netProfitA.toFixed(2),
+        netProfitB: netProfitB.toFixed(2),
+        netProfitD: netProfitD ? netProfitD.toFixed(2) : null
       });
 
       localStorage.setItem('betHistory', JSON.stringify(betHistory));
@@ -265,13 +272,13 @@
           <strong>Bet ${index + 1}:</strong><br>
           • Team A: $${bet.betA} | Team B: $${bet.betB} | ${bet.oddsD ? `Draw: $${bet.betD}` : ''}<br>
           • Losses: A: $${bet.lossA} | B: $${bet.lossB} | ${bet.lossD ? `Draw: $${bet.lossD}` : ''}<br>
-          <br>
+          • Net Profit (A): $${bet.netProfitA} | Net Profit (B): $${bet.netProfitB} ${bet.netProfitD !== null ? `| Net Profit (Draw): $${bet.netProfitD}` : ''}
         `;
         historyList.appendChild(li);
       });
     }
 
-    renderHistory(); // Load previous history on page load
+    renderHistory(); // Initial render from localStorage
   </script>
 </body>
 </html>
