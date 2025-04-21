@@ -119,6 +119,36 @@
       color: #f0f0f0;
     }
 
+    .history {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: var(--card-light);
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark-mode .history {
+      background-color: var(--card-dark);
+    }
+
+    .history ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .history li {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #f3f4f6;
+      border-radius: 5px;
+      color: #333;
+    }
+
+    body.dark-mode .history li {
+      background-color: #333;
+      color: #f0f0f0;
+    }
+
     @media (max-width: 500px) {
       body {
         padding: 15px;
@@ -153,7 +183,14 @@
     <div class="output" id="result">🔢 Enter values to calculate optimal bets.</div>
   </div>
 
+  <div class="history">
+    <h3>📝 Bet History</h3>
+    <ul id="historyList"></ul>
+  </div>
+
   <script>
+    let betHistory = JSON.parse(localStorage.getItem('betHistory')) || [];
+
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode');
     }
@@ -188,7 +225,7 @@
       const pctB = (lossB / budget) * 100;
       const pctD = lossD !== null ? (lossD / budget) * 100 : null;
 
-      resultBox.innerHTML = `
+      const outcome = `
         <strong>🔁 Optimal Bet Split:</strong><br>
         • Team A: <strong>$${betA.toFixed(2)}</strong><br>
         • Team B: <strong>$${betB.toFixed(2)}</strong><br>
@@ -200,7 +237,41 @@
         ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Loss = $${lossD.toFixed(2)} (${pctD.toFixed(2)}%)<br>` : ''}
         <br>📉 <strong>Worst-case loss:</strong> $${Math.max(lossA, lossB, lossD || 0).toFixed(2)}
       `;
+      resultBox.innerHTML = outcome;
+
+      betHistory.push({
+        oddsA,
+        oddsB,
+        oddsD,
+        budget,
+        betA: betA.toFixed(2),
+        betB: betB.toFixed(2),
+        betD: betD.toFixed(2),
+        lossA: lossA.toFixed(2),
+        lossB: lossB.toFixed(2),
+        lossD: lossD ? lossD.toFixed(2) : null,
+      });
+
+      localStorage.setItem('betHistory', JSON.stringify(betHistory));
+      renderHistory();
     }
+
+    function renderHistory() {
+      const historyList = document.getElementById("historyList");
+      historyList.innerHTML = '';
+      betHistory.forEach((bet, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <strong>Bet ${index + 1}:</strong><br>
+          • Team A: $${bet.betA} | Team B: $${bet.betB} | ${bet.oddsD ? `Draw: $${bet.betD}` : ''}<br>
+          • Losses: A: $${bet.lossA} | B: $${bet.lossB} | ${bet.lossD ? `Draw: $${bet.lossD}` : ''}<br>
+          <br>
+        `;
+        historyList.appendChild(li);
+      });
+    }
+
+    renderHistory(); // Load previous history on page load
   </script>
 </body>
 </html>
