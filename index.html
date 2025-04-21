@@ -3,21 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kaush Bet Calculator</title>
+  <title>Hedge Bet Calculator Pro</title>
   <style>
     :root {
-      --bg-light: #f0f4f8;
+      --bg-light: #f4f7fa;
       --card-light: #ffffff;
       --text-light: #111827;
       --subtext-light: #555;
       --border-light: #ccc;
-
       --bg-dark: #121212;
-      --card-dark: #1e1e1e;
+      --card-dark: #1f1f1f;
       --text-dark: #f9fafb;
       --subtext-dark: #cccccc;
       --border-dark: #444;
-
       --accent: #4f46e5;
     }
 
@@ -34,7 +32,6 @@
       transition: background-color 0.3s, color 0.3s;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
       min-height: 100vh;
     }
 
@@ -48,80 +45,13 @@
       padding: 25px 30px;
       border-radius: 16px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      max-width: 450px;
+      max-width: 500px;
       width: 100%;
       transition: background-color 0.3s, color 0.3s;
     }
 
     body.dark-mode .calculator {
       background-color: var(--card-dark);
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin: 15px 0 5px;
-      color: var(--subtext-light);
-      font-weight: 600;
-      transition: color 0.3s;
-    }
-
-    body.dark-mode label {
-      color: var(--subtext-dark);
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid var(--border-light);
-      border-radius: 10px;
-      background-color: #fff;
-      color: #000;
-      transition: background-color 0.3s, color 0.3s, border 0.3s;
-    }
-
-    body.dark-mode input {
-      background-color: #2c2c2c;
-      color: #f9f9f9;
-      border: 1px solid var(--border-dark);
-    }
-
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #4338ca;
-    }
-
-    .output {
-      margin-top: 25px;
-      background: #f9fafb;
-      border-left: 4px solid var(--accent);
-      padding: 15px;
-      border-radius: 10px;
-      font-size: 15px;
-      color: #333;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    body.dark-mode .output {
-      background-color: #2a2a2a;
-      color: #f0f0f0;
     }
 
     .toggle-btn {
@@ -145,6 +75,50 @@
       color: #fff;
     }
 
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      background-color: #fff;
+      color: #000;
+      transition: background-color 0.3s, color 0.3s, border 0.3s;
+    }
+
+    body.dark-mode input {
+      background-color: #2c2c2c;
+      color: #f9f9f9;
+      border: 1px solid var(--border-dark);
+    }
+
+    .output {
+      margin-top: 25px;
+      background: #f9fafb;
+      border-left: 4px solid var(--accent);
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 15px;
+      color: #333;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark-mode .output {
+      background-color: #2a2a2a;
+      color: #f0f0f0;
+    }
+
     @media (max-width: 500px) {
       body {
         padding: 15px;
@@ -162,20 +136,21 @@
       <button onclick="toggleDarkMode()">🌗 Toggle Theme</button>
     </div>
 
-    <h2>🎯 Kaush Bet Calculator</h2>
+    <h2>💹 Hedge Bet Calculator Pro</h2>
 
     <label for="oddsA">Team A Odds:</label>
-    <input type="number" id="oddsA" step="0.01" placeholder="e.g. 1.80" />
+    <input type="number" id="oddsA" step="0.01" placeholder="e.g. 1.80" oninput="calculate()" />
 
     <label for="oddsB">Team B Odds:</label>
-    <input type="number" id="oddsB" step="0.01" placeholder="e.g. 1.85" />
+    <input type="number" id="oddsB" step="0.01" placeholder="e.g. 1.85" oninput="calculate()" />
+
+    <label for="oddsDraw">Draw Odds:</label>
+    <input type="number" id="oddsDraw" step="0.01" placeholder="e.g. 3.20 (optional)" oninput="calculate()" />
 
     <label for="budget">Total Budget:</label>
-    <input type="number" id="budget" step="0.01" placeholder="e.g. 2350" />
+    <input type="number" id="budget" step="0.01" placeholder="e.g. 2350" oninput="calculate()" />
 
-    <button onclick="calculate()">CLICK TO CALCULATE...</button>
-
-    <div class="output" id="result"></div>
+    <div class="output" id="result">🔢 Enter values to calculate optimal bets.</div>
   </div>
 
   <script>
@@ -186,6 +161,7 @@
     function calculate() {
       const oddsA = parseFloat(document.getElementById("oddsA").value);
       const oddsB = parseFloat(document.getElementById("oddsB").value);
+      const oddsD = parseFloat(document.getElementById("oddsDraw").value || 0);
       const budget = parseFloat(document.getElementById("budget").value);
       const resultBox = document.getElementById("result");
 
@@ -194,26 +170,35 @@
         return;
       }
 
-      const totalOdds = oddsA + oddsB;
-      const betA = (budget * oddsB) / totalOdds;
-      const betB = budget - betA;
+      let totalOdds = oddsA + oddsB + (oddsD > 1 ? oddsD : 0);
+
+      const betA = (budget * oddsB * (oddsD > 1 ? oddsD : 1)) / totalOdds;
+      const betB = (budget * oddsA * (oddsD > 1 ? oddsD : 1)) / totalOdds;
+      const betD = oddsD > 1 ? budget - (betA + betB) : 0;
 
       const returnA = betA * oddsA;
       const returnB = betB * oddsB;
+      const returnD = betD * oddsD;
 
-      const lossIfA = budget - returnA;
-      const lossIfB = budget - returnB;
+      const lossA = budget - returnA;
+      const lossB = budget - returnB;
+      const lossD = oddsD > 1 ? budget - returnD : null;
+
+      const pctA = (lossA / budget) * 100;
+      const pctB = (lossB / budget) * 100;
+      const pctD = lossD !== null ? (lossD / budget) * 100 : null;
 
       resultBox.innerHTML = `
-        <strong>💰 Optimal Bet Split:</strong><br>
+        <strong>🔁 Optimal Bet Split:</strong><br>
         • Team A: <strong>$${betA.toFixed(2)}</strong><br>
-        • Team B: <strong>$${betB.toFixed(2)}</strong><br><br>
+        • Team B: <strong>$${betB.toFixed(2)}</strong><br>
+        ${oddsD > 1 ? `• Draw: <strong>$${betD.toFixed(2)}</strong><br>` : ''}
 
-        <strong>📊 Outcomes:</strong><br>
-        ✔️ If <strong>Team A wins</strong>: Return = $${returnA.toFixed(2)} → Loss = $${lossIfA.toFixed(2)}<br>
-        ✔️ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Loss = $${lossIfB.toFixed(2)}<br><br>
-
-        📉 <strong>Worst-case loss:</strong> $${Math.max(lossIfA, lossIfB).toFixed(2)}
+        <br><strong>📊 Outcomes:</strong><br>
+        ✅ If <strong>Team A wins</strong>: Return = $${returnA.toFixed(2)} → Loss = $${lossA.toFixed(2)} (${pctA.toFixed(2)}%)<br>
+        ✅ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Loss = $${lossB.toFixed(2)} (${pctB.toFixed(2)}%)<br>
+        ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Loss = $${lossD.toFixed(2)} (${pctD.toFixed(2)}%)<br>` : ''}
+        <br>📉 <strong>Worst-case loss:</strong> $${Math.max(lossA, lossB, lossD || 0).toFixed(2)}
       `;
     }
   </script>
