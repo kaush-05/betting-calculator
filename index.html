@@ -17,6 +17,8 @@
       --subtext-dark: #cccccc;
       --border-dark: #444;
       --accent: #4f46e5;
+      --hover-light: #e3e8f0;
+      --hover-dark: #333;
     }
 
     * {
@@ -63,11 +65,12 @@
     .toggle-btn button {
       background-color: #e2e8f0;
       color: #333;
-      padding: 8px 16px;
+      padding: 10px 20px;
       border: none;
       border-radius: 8px;
       font-size: 14px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
 
     body.dark-mode .toggle-btn button {
@@ -75,9 +78,19 @@
       color: #fff;
     }
 
+    .toggle-btn button:hover {
+      background-color: var(--hover-light);
+    }
+
+    body.dark-mode .toggle-btn button:hover {
+      background-color: var(--hover-dark);
+    }
+
     h2 {
       text-align: center;
       margin-bottom: 20px;
+      font-size: 24px;
+      color: var(--accent);
     }
 
     label {
@@ -95,6 +108,7 @@
       background-color: #fff;
       color: #000;
       transition: background-color 0.3s, color 0.3s, border 0.3s;
+      margin-bottom: 15px;
     }
 
     body.dark-mode input {
@@ -104,13 +118,14 @@
     }
 
     .output {
-      margin-top: 25px;
-      background: #f9fafb;
-      border-left: 4px solid var(--accent);
-      padding: 15px;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f4f7fa;
+      border-left: 5px solid var(--accent);
       border-radius: 10px;
-      font-size: 15px;
+      font-size: 16px;
       color: #333;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       transition: background 0.3s, color 0.3s;
     }
 
@@ -119,34 +134,10 @@
       color: #f0f0f0;
     }
 
-    .history {
-      margin-top: 30px;
-      padding: 15px;
-      background-color: var(--card-light);
-      border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    body.dark-mode .history {
-      background-color: var(--card-dark);
-    }
-
-    .history ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    .history li {
-      margin-bottom: 10px;
-      padding: 10px;
-      background-color: #f3f4f6;
-      border-radius: 5px;
-      color: #333;
-    }
-
-    body.dark-mode .history li {
-      background-color: #333;
-      color: #f0f0f0;
+    .output h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: var(--accent);
     }
 
     @media (max-width: 500px) {
@@ -156,6 +147,10 @@
 
       .calculator {
         padding: 20px;
+      }
+
+      .output {
+        font-size: 14px;
       }
     }
   </style>
@@ -174,8 +169,8 @@
     <label for="oddsB">Team B Odds:</label>
     <input type="number" id="oddsB" step="0.01" placeholder="e.g. 1.85" oninput="calculate()" />
 
-    <label for="oddsDraw">Draw Odds:</label>
-    <input type="number" id="oddsDraw" step="0.01" placeholder="e.g. 3.20 (optional)" oninput="calculate()" />
+    <label for="oddsDraw">Draw Odds (optional):</label>
+    <input type="number" id="oddsDraw" step="0.01" placeholder="e.g. 3.20" oninput="calculate()" />
 
     <label for="budget">Total Budget:</label>
     <input type="number" id="budget" step="0.01" placeholder="e.g. 2350" oninput="calculate()" />
@@ -183,14 +178,7 @@
     <div class="output" id="result">🔢 Enter values to calculate optimal bets.</div>
   </div>
 
-  <div class="history">
-    <h3>📝 Bet History</h3>
-    <ul id="historyList"></ul>
-  </div>
-
   <script>
-    let betHistory = JSON.parse(localStorage.getItem('betHistory')) || [];
-
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode');
     }
@@ -221,64 +209,20 @@
       const lossB = budget - returnB;
       const lossD = oddsD > 1 ? budget - returnD : null;
 
-      const pctA = (lossA / budget) * 100;
-      const pctB = (lossB / budget) * 100;
-      const pctD = lossD !== null ? (lossD / budget) * 100 : null;
-
-      const netProfitA = returnA - budget;
-      const netProfitB = returnB - budget;
-      const netProfitD = returnD !== undefined ? returnD - budget : null;
-
       const outcome = `
-        <strong>🔁 Optimal Bet Split:</strong><br>
+        <h3>🔁 Optimal Bet Split:</h3>
         • Team A: <strong>$${betA.toFixed(2)}</strong><br>
         • Team B: <strong>$${betB.toFixed(2)}</strong><br>
         ${oddsD > 1 ? `• Draw: <strong>$${betD.toFixed(2)}</strong><br>` : ''}
 
         <br><strong>📊 Outcomes:</strong><br>
-        ✅ If <strong>Team A wins</strong>: Return = $${returnA.toFixed(2)} → Net Profit = $${netProfitA.toFixed(2)}<br>
-        ✅ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Net Profit = $${netProfitB.toFixed(2)}<br>
-        ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Net Profit = $${netProfitD.toFixed(2)}<br>` : ''}
+        ✅ If <strong>Team A wins</strong>: Return = $${returnA.toFixed(2)} → Loss = $${lossA.toFixed(2)}<br>
+        ✅ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Loss = $${lossB.toFixed(2)}<br>
+        ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Loss = $${lossD.toFixed(2)}<br>` : ''}
         <br>📉 <strong>Worst-case loss:</strong> $${Math.max(lossA, lossB, lossD || 0).toFixed(2)}
       `;
       resultBox.innerHTML = outcome;
-
-      betHistory.push({
-        oddsA,
-        oddsB,
-        oddsD,
-        budget,
-        betA: betA.toFixed(2),
-        betB: betB.toFixed(2),
-        betD: betD.toFixed(2),
-        lossA: lossA.toFixed(2),
-        lossB: lossB.toFixed(2),
-        lossD: lossD ? lossD.toFixed(2) : null,
-        netProfitA: netProfitA.toFixed(2),
-        netProfitB: netProfitB.toFixed(2),
-        netProfitD: netProfitD ? netProfitD.toFixed(2) : null
-      });
-
-      localStorage.setItem('betHistory', JSON.stringify(betHistory));
-      renderHistory();
     }
-
-    function renderHistory() {
-      const historyList = document.getElementById("historyList");
-      historyList.innerHTML = '';
-      betHistory.forEach((bet, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <strong>Bet ${index + 1}:</strong><br>
-          • Team A: $${bet.betA} | Team B: $${bet.betB} | ${bet.oddsD ? `Draw: $${bet.betD}` : ''}<br>
-          • Losses: A: $${bet.lossA} | B: $${bet.lossB} | ${bet.lossD ? `Draw: $${bet.lossD}` : ''}<br>
-          • Net Profit (A): $${bet.netProfitA} | Net Profit (B): $${bet.netProfitB} ${bet.netProfitD !== null ? `| Net Profit (Draw): $${bet.netProfitD}` : ''}
-        `;
-        historyList.appendChild(li);
-      });
-    }
-
-    renderHistory(); // Initial render from localStorage
   </script>
 </body>
 </html>
