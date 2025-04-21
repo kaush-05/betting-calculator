@@ -209,6 +209,12 @@
       const lossB = budget - returnB;
       const lossD = oddsD > 1 ? budget - returnD : null;
 
+      // Calculating the profits
+      const profitA = betA * (oddsA - 1);
+      const profitB = betB * (oddsB - 1);
+      const totalProfit = profitA + profitB;
+      const netProfit = totalProfit - budget;
+
       const outcome = `
         <h3>🔁 Optimal Bet Split:</h3>
         • Team A: <strong>$${betA.toFixed(2)}</strong><br>
@@ -220,6 +226,9 @@
         ✅ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Loss = $${lossB.toFixed(2)}<br>
         ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Loss = $${lossD.toFixed(2)}<br>` : ''}
         <br>📉 <strong>Worst-case loss:</strong> $${Math.max(lossA, lossB, lossD || 0).toFixed(2)}
+
+        <br><br><strong>💰 Total Profit:</strong> $${totalProfit.toFixed(2)}<br>
+        <strong>🌟 Net Profit (after subtracting budget):</strong> $${netProfit.toFixed(2)}
       `;
       resultBox.innerHTML = outcome;
     }
