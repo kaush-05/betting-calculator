@@ -6,7 +6,7 @@
   <title>Hedge Bet Calculator Pro</title>
   <style>
     :root {
-      --bg-light: #f9fafb;
+      --bg-light: #f4f7fa;
       --card-light: #ffffff;
       --text-light: #111827;
       --subtext-light: #555;
@@ -14,34 +14,25 @@
       --bg-dark: #121212;
       --card-dark: #1f1f1f;
       --text-dark: #f9fafb;
+      --subtext-dark: #cccccc;
+      --border-dark: #444;
       --accent: #4f46e5;
-      --hover-light: #e3e8f0;
-      --hover-dark: #333;
-      --input-border: #d1d5db;
-      --input-focus-border: #4f46e5;
-      --button-bg: #4f46e5;
-      --button-hover-bg: #3b3de3;
-      --text-button: #ffffff;
-      --animation-duration: 0.4s;
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
       font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 30px;
       background-color: var(--bg-light);
       color: var(--text-light);
       transition: background-color 0.3s, color 0.3s;
       display: flex;
       justify-content: center;
-      align-items: center;
       min-height: 100vh;
-      padding: 20px;
-      overflow-x: hidden;
     }
 
     body.dark-mode {
@@ -51,39 +42,32 @@
 
     .calculator {
       background-color: var(--card-light);
-      padding: 40px;
+      padding: 25px 30px;
       border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       max-width: 500px;
       width: 100%;
-      transition: background-color 0.3s, color 0.3s, transform 0.5s;
-      transform: translateY(30px);
-      opacity: 0;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     body.dark-mode .calculator {
       background-color: var(--card-dark);
     }
 
-    body.dark-mode .calculator {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
     .toggle-btn {
       display: flex;
       justify-content: flex-end;
+      margin-bottom: 10px;
     }
 
     .toggle-btn button {
       background-color: #e2e8f0;
       color: #333;
-      padding: 10px 20px;
+      padding: 8px 16px;
       border: none;
       border-radius: 8px;
       font-size: 14px;
       cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
     }
 
     body.dark-mode .toggle-btn button {
@@ -91,74 +75,43 @@
       color: #fff;
     }
 
-    .toggle-btn button:hover {
-      background-color: var(--hover-light);
-      transform: scale(1.05);
-    }
-
-    body.dark-mode .toggle-btn button:hover {
-      background-color: var(--hover-dark);
-      transform: scale(1.05);
-    }
-
     h2 {
       text-align: center;
       margin-bottom: 20px;
-      font-size: 24px;
-      color: var(--accent);
-      animation: fadeIn 0.6s ease-out forwards;
     }
 
     label {
       display: block;
-      margin: 12px 0 6px;
+      margin: 15px 0 5px;
       font-weight: 600;
-      font-size: 16px;
-      animation: fadeIn 0.6s ease-out forwards;
-      animation-delay: 0.5s;
     }
 
     input {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       font-size: 16px;
-      border: 2px solid var(--input-border);
+      border: 1px solid var(--border-light);
       border-radius: 10px;
       background-color: #fff;
       color: #000;
-      transition: all 0.3s ease-in-out;
-      margin-bottom: 20px;
-      animation: fadeIn 0.6s ease-out forwards;
-      animation-delay: 1s;
+      transition: background-color 0.3s, color 0.3s, border 0.3s;
     }
 
     body.dark-mode input {
       background-color: #2c2c2c;
       color: #f9f9f9;
-      border: 2px solid var(--input-border);
-    }
-
-    body.dark-mode input:focus {
-      border-color: var(--input-focus-border);
-    }
-
-    input:focus {
-      border-color: var(--accent);
-      outline: none;
+      border: 1px solid var(--border-dark);
     }
 
     .output {
-      margin-top: 20px;
-      padding: 25px;
-      background-color: var(--bg-light);
-      border-left: 5px solid var(--accent);
-      border-radius: 12px;
-      font-size: 16px;
+      margin-top: 25px;
+      background: #f9fafb;
+      border-left: 4px solid var(--accent);
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 15px;
       color: #333;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       transition: background 0.3s, color 0.3s;
-      animation: fadeIn 0.6s ease-out forwards;
-      animation-delay: 1.5s;
     }
 
     body.dark-mode .output {
@@ -166,32 +119,34 @@
       color: #f0f0f0;
     }
 
-    .output h3 {
-      font-size: 20px;
-      margin-bottom: 15px;
-      color: var(--accent);
-    }
-
-    .button {
-      display: inline-block;
-      width: 100%;
+    .history {
+      margin-top: 30px;
       padding: 15px;
-      background-color: var(--button-bg);
-      color: var(--text-button);
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
+      background-color: var(--card-light);
       border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s;
-      border: none;
-      animation: fadeIn 0.6s ease-out forwards;
-      animation-delay: 2s;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
-    .button:hover {
-      background-color: var(--button-hover-bg);
-      transform: scale(1.05);
+    body.dark-mode .history {
+      background-color: var(--card-dark);
+    }
+
+    .history ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .history li {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #f3f4f6;
+      border-radius: 5px;
+      color: #333;
+    }
+
+    body.dark-mode .history li {
+      background-color: #333;
+      color: #f0f0f0;
     }
 
     @media (max-width: 500px) {
@@ -201,22 +156,6 @@
 
       .calculator {
         padding: 20px;
-      }
-
-      .output {
-        font-size: 14px;
-      }
-    }
-
-    /* Animation for fading in elements */
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
       }
     }
   </style>
@@ -235,18 +174,23 @@
     <label for="oddsB">Team B Odds:</label>
     <input type="number" id="oddsB" step="0.01" placeholder="e.g. 1.85" oninput="calculate()" />
 
-    <label for="oddsDraw">Draw Odds (optional):</label>
-    <input type="number" id="oddsDraw" step="0.01" placeholder="e.g. 3.20" oninput="calculate()" />
+    <label for="oddsDraw">Draw Odds:</label>
+    <input type="number" id="oddsDraw" step="0.01" placeholder="e.g. 3.20 (optional)" oninput="calculate()" />
 
     <label for="budget">Total Budget:</label>
     <input type="number" id="budget" step="0.01" placeholder="e.g. 2350" oninput="calculate()" />
 
-    <button class="button" onclick="calculate()">Calculate Optimal Bets</button>
-
     <div class="output" id="result">🔢 Enter values to calculate optimal bets.</div>
   </div>
 
+  <div class="history">
+    <h3>📝 Bet History</h3>
+    <ul id="historyList"></ul>
+  </div>
+
   <script>
+    let betHistory = JSON.parse(localStorage.getItem('betHistory')) || [];
+
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode');
     }
@@ -277,27 +221,64 @@
       const lossB = budget - returnB;
       const lossD = oddsD > 1 ? budget - returnD : null;
 
-      // Calculating the profits
-      const profitA = betA * (oddsA - 1);
-      const profitB = betB * (oddsB - 1);
-      const totalProfit = profitA + profitB;
+      const pctA = (lossA / budget) * 100;
+      const pctB = (lossB / budget) * 100;
+      const pctD = lossD !== null ? (lossD / budget) * 100 : null;
+
+      const netProfitA = returnA - budget;
+      const netProfitB = returnB - budget;
+      const netProfitD = returnD !== undefined ? returnD - budget : null;
 
       const outcome = `
-        <h3>🔁 Optimal Bet Split:</h3>
+        <strong>🔁 Optimal Bet Split:</strong><br>
         • Team A: <strong>$${betA.toFixed(2)}</strong><br>
         • Team B: <strong>$${betB.toFixed(2)}</strong><br>
         ${oddsD > 1 ? `• Draw: <strong>$${betD.toFixed(2)}</strong><br>` : ''}
 
         <br><strong>📊 Outcomes:</strong><br>
-        ✅ If <strong>Team A wins</strong>: Return = $${returnA.toFixed(2)} → Loss = $${lossA.toFixed(2)}<br>
-        ✅ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Loss = $${lossB.toFixed(2)}<br>
-        ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Loss = $${lossD.toFixed(2)}<br>` : ''}
-
-        <br><strong>Total Profit (A + B):</strong> $${totalProfit.toFixed(2)}<br>
-        <strong>Worst-case loss:</strong> $${Math.max(lossA, lossB, lossD || 0).toFixed(2)}
+        ✅ If <strong>Team A wins</strong>: Return = $${returnA.toFixed(2)} → Net Profit = $${netProfitA.toFixed(2)}<br>
+        ✅ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Net Profit = $${netProfitB.toFixed(2)}<br>
+        ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Net Profit = $${netProfitD.toFixed(2)}<br>` : ''}
+        <br>📉 <strong>Worst-case loss:</strong> $${Math.max(lossA, lossB, lossD || 0).toFixed(2)}
       `;
       resultBox.innerHTML = outcome;
+
+      betHistory.push({
+        oddsA,
+        oddsB,
+        oddsD,
+        budget,
+        betA: betA.toFixed(2),
+        betB: betB.toFixed(2),
+        betD: betD.toFixed(2),
+        lossA: lossA.toFixed(2),
+        lossB: lossB.toFixed(2),
+        lossD: lossD ? lossD.toFixed(2) : null,
+        netProfitA: netProfitA.toFixed(2),
+        netProfitB: netProfitB.toFixed(2),
+        netProfitD: netProfitD ? netProfitD.toFixed(2) : null
+      });
+
+      localStorage.setItem('betHistory', JSON.stringify(betHistory));
+      renderHistory();
     }
+
+    function renderHistory() {
+      const historyList = document.getElementById("historyList");
+      historyList.innerHTML = '';
+      betHistory.forEach((bet, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <strong>Bet ${index + 1}:</strong><br>
+          • Team A: $${bet.betA} | Team B: $${bet.betB} | ${bet.oddsD ? `Draw: $${bet.betD}` : ''}<br>
+          • Losses: A: $${bet.lossA} | B: $${bet.lossB} | ${bet.lossD ? `Draw: $${bet.lossD}` : ''}<br>
+          • Net Profit (A): $${bet.netProfitA} | Net Profit (B): $${bet.netProfitB} ${bet.netProfitD !== null ? `| Net Profit (Draw): $${bet.netProfitD}` : ''}
+        `;
+        historyList.appendChild(li);
+      });
+    }
+
+    renderHistory(); // Initial render from localStorage
   </script>
 </body>
 </html>
