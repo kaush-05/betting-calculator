@@ -3,282 +3,211 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hedge Bet Calculator Pro</title>
+  <title>Hedge Bet Calculator</title>
   <style>
     :root {
-      --bg-light: #f4f7fa;
-      --card-light: #ffffff;
-      --text-light: #111827;
-      --subtext-light: #555;
-      --border-light: #ccc;
-      --bg-dark: #121212;
-      --card-dark: #1f1f1f;
-      --text-dark: #f9fafb;
-      --subtext-dark: #cccccc;
-      --border-dark: #444;
+      --bg: #f0f4f8;
+      --text: #1a1a1a;
+      --card: #ffffff;
       --accent: #4f46e5;
-    }
-
-    * {
-      box-sizing: border-box;
+      --hover: #e5e7eb;
+      --dark-bg: #121212;
+      --dark-text: #f3f3f3;
+      --dark-card: #1e1e1e;
     }
 
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 30px;
-      background-color: var(--bg-light);
-      color: var(--text-light);
-      transition: background-color 0.3s, color 0.3s;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
       display: flex;
       justify-content: center;
+      align-items: center;
       min-height: 100vh;
+      transition: 0.4s;
     }
 
-    body.dark-mode {
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
+    .dark {
+      background: var(--dark-bg);
+      color: var(--dark-text);
     }
 
-    .calculator {
-      background-color: var(--card-light);
-      padding: 25px 30px;
+    .container {
+      background: var(--card);
+      padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       max-width: 500px;
-      width: 100%;
-      transition: background-color 0.3s, color 0.3s;
+      width: 90%;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+      animation: fadeIn 1s ease-out;
+      transition: 0.4s;
     }
 
-    body.dark-mode .calculator {
-      background-color: var(--card-dark);
-    }
-
-    .toggle-btn {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 10px;
-    }
-
-    .toggle-btn button {
-      background-color: #e2e8f0;
-      color: #333;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    body.dark-mode .toggle-btn button {
-      background-color: #333;
-      color: #fff;
+    .dark .container {
+      background: var(--dark-card);
     }
 
     h2 {
       text-align: center;
+      color: var(--accent);
       margin-bottom: 20px;
     }
 
     label {
       display: block;
-      margin: 15px 0 5px;
+      margin-top: 15px;
       font-weight: 600;
     }
 
     input {
       width: 100%;
       padding: 10px;
+      margin-top: 6px;
       font-size: 16px;
-      border: 1px solid var(--border-light);
-      border-radius: 10px;
-      background-color: #fff;
-      color: #000;
-      transition: background-color 0.3s, color 0.3s, border 0.3s;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      transition: 0.3s;
     }
 
-    body.dark-mode input {
-      background-color: #2c2c2c;
-      color: #f9f9f9;
-      border: 1px solid var(--border-dark);
+    .dark input {
+      background: #333;
+      color: #fff;
+      border: 1px solid #666;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s;
+    }
+
+    button:hover {
+      background: #4338ca;
+      transform: scale(1.03);
     }
 
     .output {
-      margin-top: 25px;
+      margin-top: 20px;
       background: #f9fafb;
-      border-left: 4px solid var(--accent);
-      padding: 15px;
-      border-radius: 10px;
+      padding: 20px;
+      border-radius: 12px;
       font-size: 15px;
-      color: #333;
-      transition: background 0.3s, color 0.3s;
+      transition: 0.3s ease-in-out;
     }
 
-    body.dark-mode .output {
-      background-color: #2a2a2a;
-      color: #f0f0f0;
+    .dark .output {
+      background: #2b2b2b;
     }
 
-    .history {
-      margin-top: 30px;
-      padding: 15px;
-      background-color: var(--card-light);
-      border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    body.dark-mode .history {
-      background-color: var(--card-dark);
-    }
-
-    .history ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    .history li {
+    .toggle {
+      text-align: right;
       margin-bottom: 10px;
-      padding: 10px;
-      background-color: #f3f4f6;
-      border-radius: 5px;
-      color: #333;
     }
 
-    body.dark-mode .history li {
-      background-color: #333;
-      color: #f0f0f0;
+    .toggle button {
+      background: transparent;
+      color: var(--accent);
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
     }
 
-    @media (max-width: 500px) {
-      body {
-        padding: 15px;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
       }
-
-      .calculator {
-        padding: 20px;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   </style>
 </head>
 <body>
-  <div class="calculator">
-    <div class="toggle-btn">
-      <button onclick="toggleDarkMode()">🌗 Toggle Theme</button>
+  <div class="container">
+    <div class="toggle">
+      <button onclick="toggleMode()">🌗 Toggle Mode</button>
     </div>
 
-    <h2>💹 Hedge Bet Calculator Pro</h2>
+    <h2>💹 Hedge Bet Calculator</h2>
 
-    <label for="oddsA">Team A Odds:</label>
-    <input type="number" id="oddsA" step="0.01" placeholder="e.g. 1.80" oninput="calculate()" />
+    <label>Team A Odds</label>
+    <input type="number" id="oddsA" placeholder="e.g. 1.80" step="0.01" />
 
-    <label for="oddsB">Team B Odds:</label>
-    <input type="number" id="oddsB" step="0.01" placeholder="e.g. 1.85" oninput="calculate()" />
+    <label>Team B Odds</label>
+    <input type="number" id="oddsB" placeholder="e.g. 1.90" step="0.01" />
 
-    <label for="oddsDraw">Draw Odds:</label>
-    <input type="number" id="oddsDraw" step="0.01" placeholder="e.g. 3.20 (optional)" oninput="calculate()" />
+    <label>Draw Odds (optional)</label>
+    <input type="number" id="oddsDraw" placeholder="e.g. 3.20" step="0.01" />
 
-    <label for="budget">Total Budget:</label>
-    <input type="number" id="budget" step="0.01" placeholder="e.g. 2350" oninput="calculate()" />
+    <label>Total Budget</label>
+    <input type="number" id="budget" placeholder="e.g. 1000" step="0.01" />
 
-    <div class="output" id="result">🔢 Enter values to calculate optimal bets.</div>
-  </div>
+    <button onclick="calculate()">Calculate</button>
 
-  <div class="history">
-    <h3>📝 Bet History</h3>
-    <ul id="historyList"></ul>
+    <div class="output" id="result">
+      🔢 Enter values and click calculate.
+    </div>
   </div>
 
   <script>
-    let betHistory = JSON.parse(localStorage.getItem('betHistory')) || [];
-
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark-mode');
+    function toggleMode() {
+      document.body.classList.toggle('dark');
     }
 
     function calculate() {
       const oddsA = parseFloat(document.getElementById("oddsA").value);
       const oddsB = parseFloat(document.getElementById("oddsB").value);
-      const oddsD = parseFloat(document.getElementById("oddsDraw").value || 0);
+      const oddsD = parseFloat(document.getElementById("oddsDraw").value) || 0;
       const budget = parseFloat(document.getElementById("budget").value);
+
       const resultBox = document.getElementById("result");
 
       if (!oddsA || !oddsB || !budget || oddsA <= 1 || oddsB <= 1) {
-        resultBox.innerHTML = "⚠️ Please enter valid odds (>1.0) and budget.";
+        resultBox.innerHTML = "⚠️ Please enter valid odds and budget.";
         return;
       }
 
-      let totalOdds = oddsA + oddsB + (oddsD > 1 ? oddsD : 0);
+      const totalOdds = oddsA + oddsB + (oddsD > 1 ? oddsD : 0);
 
       const betA = (budget * oddsB * (oddsD > 1 ? oddsD : 1)) / totalOdds;
       const betB = (budget * oddsA * (oddsD > 1 ? oddsD : 1)) / totalOdds;
-      const betD = oddsD > 1 ? budget - (betA + betB) : 0;
+      const betD = oddsD > 1 ? budget - betA - betB : 0;
 
       const returnA = betA * oddsA;
       const returnB = betB * oddsB;
       const returnD = betD * oddsD;
 
-      const lossA = budget - returnA;
-      const lossB = budget - returnB;
-      const lossD = oddsD > 1 ? budget - returnD : null;
+      const profitA = returnA - budget;
+      const profitB = returnB - budget;
+      const profitD = oddsD > 1 ? returnD - budget : 0;
 
-      const pctA = (lossA / budget) * 100;
-      const pctB = (lossB / budget) * 100;
-      const pctD = lossD !== null ? (lossD / budget) * 100 : null;
+      const totalProfit = profitA + profitB;
 
-      const netProfitA = returnA - budget;
-      const netProfitB = returnB - budget;
-      const netProfitD = returnD !== undefined ? returnD - budget : null;
-
-      const outcome = `
-        <strong>🔁 Optimal Bet Split:</strong><br>
-        • Team A: <strong>$${betA.toFixed(2)}</strong><br>
-        • Team B: <strong>$${betB.toFixed(2)}</strong><br>
-        ${oddsD > 1 ? `• Draw: <strong>$${betD.toFixed(2)}</strong><br>` : ''}
-
-        <br><strong>📊 Outcomes:</strong><br>
-        ✅ If <strong>Team A wins</strong>: Return = $${returnA.toFixed(2)} → Net Profit = $${netProfitA.toFixed(2)}<br>
-        ✅ If <strong>Team B wins</strong>: Return = $${returnB.toFixed(2)} → Net Profit = $${netProfitB.toFixed(2)}<br>
-        ${oddsD > 1 ? `✅ If <strong>Draw</strong>: Return = $${returnD.toFixed(2)} → Net Profit = $${netProfitD.toFixed(2)}<br>` : ''}
-        <br>📉 <strong>Worst-case loss:</strong> $${Math.max(lossA, lossB, lossD || 0).toFixed(2)}
+      resultBox.innerHTML = `
+        ✅ <strong>Bet Split:</strong><br>
+        • Team A: $${betA.toFixed(2)}<br>
+        • Team B: $${betB.toFixed(2)}<br>
+        ${oddsD > 1 ? `• Draw: $${betD.toFixed(2)}<br>` : ""}
+        <br>
+        📊 <strong>Profit vs Budget:</strong><br>
+        • If Team A wins: $${profitA.toFixed(2)}<br>
+        • If Team B wins: $${profitB.toFixed(2)}<br>
+        ${oddsD > 1 ? `• If Draw: $${profitD.toFixed(2)}<br>` : ""}
+        <br>
+        💰 <strong>Total Profit (A + B):</strong> $${totalProfit.toFixed(2)}
       `;
-      resultBox.innerHTML = outcome;
-
-      betHistory.push({
-        oddsA,
-        oddsB,
-        oddsD,
-        budget,
-        betA: betA.toFixed(2),
-        betB: betB.toFixed(2),
-        betD: betD.toFixed(2),
-        lossA: lossA.toFixed(2),
-        lossB: lossB.toFixed(2),
-        lossD: lossD ? lossD.toFixed(2) : null,
-        netProfitA: netProfitA.toFixed(2),
-        netProfitB: netProfitB.toFixed(2),
-        netProfitD: netProfitD ? netProfitD.toFixed(2) : null
-      });
-
-      localStorage.setItem('betHistory', JSON.stringify(betHistory));
-      renderHistory();
     }
-
-    function renderHistory() {
-      const historyList = document.getElementById("historyList");
-      historyList.innerHTML = '';
-      betHistory.forEach((bet, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <strong>Bet ${index + 1}:</strong><br>
-          • Team A: $${bet.betA} | Team B: $${bet.betB} | ${bet.oddsD ? `Draw: $${bet.betD}` : ''}<br>
-          • Losses: A: $${bet.lossA} | B: $${bet.lossB} | ${bet.lossD ? `Draw: $${bet.lossD}` : ''}<br>
-          • Net Profit (A): $${bet.netProfitA} | Net Profit (B): $${bet.netProfitB} ${bet.netProfitD !== null ? `| Net Profit (Draw): $${bet.netProfitD}` : ''}
-        `;
-        historyList.appendChild(li);
-      });
-    }
-
-    renderHistory(); // Initial render from localStorage
   </script>
 </body>
 </html>
