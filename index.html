@@ -17,6 +17,8 @@
       --subtext-dark: #cccccc;
       --border-dark: #444;
       --accent: #4f46e5;
+      --highlight: #16a34a;
+      --danger: #dc2626;
     }
 
     * {
@@ -118,6 +120,16 @@
       background-color: #2a2a2a;
       color: #f0f0f0;
     }
+
+    .highlight {
+      color: var(--highlight);
+      font-weight: bold;
+    }
+
+    .danger {
+      color: var(--danger);
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -156,7 +168,7 @@
         return;
       }
 
-      let totalOdds = oddsA + oddsB;
+      const totalOdds = oddsA + oddsB;
       const betA = (budget * oddsB) / totalOdds;
       const betB = budget - betA;
 
@@ -169,6 +181,8 @@
       const totalCombinedReturn = returnA + returnB;
       const combinedProfitLoss = totalCombinedReturn - budget;
 
+      const saferTeam = lossA < lossB ? 'Team A' : 'Team B';
+
       const profitOrLossText = combinedProfitLoss >= 0
         ? `💰 <strong>Profit:</strong> $${combinedProfitLoss.toFixed(2)}`
         : `🔻 <strong>Loss:</strong> $${Math.abs(combinedProfitLoss).toFixed(2)}`;
@@ -178,13 +192,19 @@
         • Team A: <strong>$${betA.toFixed(2)}</strong><br>
         • Team B: <strong>$${betB.toFixed(2)}</strong><br><br>
 
-        <strong>📈 Returns:</strong><br>
+        <strong>📈 Returns & Net Loss:</strong><br>
         ✅ Team A Return: $${returnA.toFixed(2)}<br>
-        ✅ Team B Return: $${returnB.toFixed(2)}<br><br>
+        🔻 Loss if Team A wins: <span class="danger">$${lossA.toFixed(2)}</span><br><br>
+
+        ✅ Team B Return: $${returnB.toFixed(2)}<br>
+        🔻 Loss if Team B wins: <span class="danger">$${lossB.toFixed(2)}</span><br><br>
 
         <strong>🧮 Combined Return:</strong> $${totalCombinedReturn.toFixed(2)}<br>
-        ${profitOrLossText}<br>
+        ${profitOrLossText}<br><br>
+
+        💡 <strong>Safer Bet:</strong> <span class="highlight">${saferTeam}</span>
       `;
+
       resultBox.innerHTML = outcome;
     }
   </script>
