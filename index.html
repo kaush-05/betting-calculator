@@ -169,6 +169,10 @@
       const totalCombinedReturn = returnA + returnB;
       const combinedProfitLoss = totalCombinedReturn - budget;
 
+      const profitOrLossText = combinedProfitLoss >= 0
+        ? `💰 <strong>Profit:</strong> $${combinedProfitLoss.toFixed(2)}`
+        : `🔻 <strong>Loss:</strong> $${Math.abs(combinedProfitLoss).toFixed(2)}`;
+
       const outcome = `
         <strong>🔁 Optimal Bet Split:</strong><br>
         • Team A: <strong>$${betA.toFixed(2)}</strong><br>
@@ -179,7 +183,7 @@
         ✅ Team B Return: $${returnB.toFixed(2)}<br><br>
 
         <strong>🧮 Combined Return:</strong> $${totalCombinedReturn.toFixed(2)}<br>
-        <strong>📉 Profit/Loss after subtracting budget:</strong> $${combinedProfitLoss.toFixed(2)}<br>
+        ${profitOrLossText}<br>
       `;
       resultBox.innerHTML = outcome;
     }
